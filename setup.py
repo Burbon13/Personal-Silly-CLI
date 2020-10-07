@@ -12,5 +12,6 @@ setup(
     entry_points='''
         [console_scripts]
         silly=src.cmd_scripts.silly:cli
+        news=src.cmd_scripts.news:cli
     ''',
 )
