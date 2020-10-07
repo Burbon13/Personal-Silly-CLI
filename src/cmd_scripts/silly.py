@@ -1,7 +1,7 @@
 """ Sample CLI commands """
 import click
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from constants import OPEN_WEATHER_API_KEY
 
 
@@ -20,7 +20,8 @@ def about():
 @cli.command()
 def creator():
     """ Prints the creator of this amazing CLI tool """
-    click.echo(click.style('This CLI tool was developed by Razvan Roatis!!!', fg='green'))
+    click.echo(click.style('This CLI tool was developed by\n'
+                           + '===========  Razvan Roatis  ===========', fg='green'))
 
 
 @cli.command()
@@ -51,7 +52,43 @@ def weather(town):
         elif response.status_code == 404:
             click.echo(response.json()['message'])
         else:
-            click.echo('Unknown error occurred')
+            click.echo(f'Unknown error occurred: {response.status_code} HTTP CODE')
+    except Exception as e:
+        click.echo(f'Error occurred: {e.message}')
+
+
+@cli.command()
+@click.option('--country', default='Belgium', help='For which country do you want COVID-19 stats')
+@click.option('--days', default=7, help='How many days to show stats for (e.g. last 7 days is default)')
+def covid(country, days):
+    """ Prints the current COVID-19 stats for a given country (default is Belgium) """
+
+    def sign_nr_to_str(nr):
+        """ If nr is positive, returns +nr, else -nr """
+        return f'+{nr}' if nr > 0 else str(nr)
+
+    click.echo(f'Retrieving COVID-19 info for {country} for the past {days} days')
+    try:
+        end_date_time = (datetime.now() + timedelta(hours=-6)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        start_date_time = (datetime.now() + timedelta(days=-days - 2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        response = requests.get(
+            f'https://api.covid19api.com/total/country/{country}?from={start_date_time}&to={end_date_time}')
+        if response.status_code == 200:
+            json_response = response.json()
+            last = json_response[0]
+            click.echo(f'=======================  {country.upper()} - LAST {days} days  =======================')
+            for stat in json_response[1:]:
+                click.echo(
+                    f'Confirmed: {stat["Confirmed"]} ({sign_nr_to_str(stat["Confirmed"] - last["Confirmed"])})'
+                    + f'  Active: {stat["Active"]} ({sign_nr_to_str(stat["Active"] - last["Active"])})'
+                    + f'  Recovered: {stat["Recovered"]} ({sign_nr_to_str(stat["Recovered"] - last["Recovered"])})'
+                    + f'  Deaths: {stat["Deaths"]}  ({sign_nr_to_str(stat["Deaths"] - last["Deaths"])})'
+                    + f'  Date: {stat["Date"]}')
+                last = stat
+        elif response.status_code == 404:
+            click.echo(f'HTTP 404: {response.json()["message"]}')
+        else:
+            click.echo(f'Unknown error occurred: {response.status_code} HTTP CODE')
     except Exception as e:
         click.echo(f'Error occurred: {e.message}')
 
