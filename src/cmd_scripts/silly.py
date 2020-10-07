@@ -93,5 +93,18 @@ def covid(country, days):
         click.echo(f'Error occurred: {e.message}')
 
 
+@cli.command()
+def dad_joke():
+    """ Prints a random dad joke (lovely type of jokes). Want to piss your girlfriend? USE THIS!!! """
+    try:
+        response = requests.get('https://icanhazdadjoke.com/', headers={'Accept': 'application/json'})
+        if response.status_code == 200:
+            click.echo(response.json()['joke'])
+        else:
+            click.echo(f'Error occurred: {response.status_code} HTTP code')
+    except Exception as e:
+        click.echo(f'Error occurred: {e}')
+
+
 if __name__ == '__main__':
     cli()
