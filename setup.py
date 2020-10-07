@@ -9,6 +9,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        silly=src.scripts.silly:cli
+        silly=src.cmd_scripts.silly:cli
     ''',
 )
