@@ -13,5 +13,6 @@ setup(
         [console_scripts]
         silly=src.cmd_scripts.silly:cli
         news=src.cmd_scripts.news:cli
+        comm=src.cmd_scripts.communication:cli
     ''',
 )
