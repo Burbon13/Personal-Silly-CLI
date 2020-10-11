@@ -259,5 +259,5 @@ pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,venv
 
-# constants
-constants.py
+# ENV VAR SETUP
+set_env_vars.bat
