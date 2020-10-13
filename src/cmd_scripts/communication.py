@@ -1,6 +1,6 @@
 import click
 from ..utils import send_email, send_test_email, send_test_sms, send_sms, insert_contact, get_contacts, \
-    delete_contact as delete_contact_data
+    delete_contact as delete_contact_data, contact_to_string, make_selection_in_cli
 
 
 @click.group()
@@ -22,10 +22,9 @@ def my_contacts():
     """ Prints all saved contacts """
     contact_list = get_contacts()
     if len(contact_list) == 0:
-        print('You have no contacts :(')
+        click.echo('You have no contacts :(')
     for contact in contact_list:
-        print(f'{contact["name"]} {contact["surname"]} ({contact["relation"]}):  {contact["phone"]}'
-              + f'  {contact["email_address"]}')
+        click.echo(contact_to_string(contact))
 
 
 @cli.command()
@@ -39,7 +38,7 @@ def create_contact(name, surname, email_address, phone, relation):
     try:
         insert_contact(name, surname, email_address, phone, relation)
     except Exception as e:
-        print('Contact error:', str(e))
+        click.echo('Contact error:', str(e))
 
 
 @cli.command()
@@ -51,10 +50,22 @@ def sms_test(to):
 
 @cli.command()
 @click.option('--to', help='To whom you want to send the SMS (phone number)')
-@click.option('--text', help='The text of the email')
-def sms(to, text):
-    """ Send an SMS """
-    send_sms(to, text)
+@click.option('--relation', help='The relation with the person',
+              type=click.Choice(['family', 'love', 'friend', 'me', 'other'], case_sensitive=False))
+@click.option('--name', help='First name')
+@click.argument('text')
+def sms(to, relation, name, text):
+    """ Send an SMS to ONE person """
+    contacts_list = get_contacts([
+        ('phone', lambda x: True if to is None else x == to),
+        ('relation', lambda x: True if relation is None else x == relation),
+        ('name', lambda x: True if name is None else x.lower().startswith(name.lower())),
+    ])
+    contact = make_selection_in_cli(contacts_list, contact_to_string, click)
+    if contact is not None:
+        send_sms(contact['phone'], text)
+    else:
+        click.echo('No contact found :(')
 
 
 @cli.command()

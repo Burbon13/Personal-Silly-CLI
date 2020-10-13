@@ -67,6 +67,17 @@ def is_contact_unique(contact, db):
 
 
 def insert_contact(name, surname, email_address, phone, relation):
+    """
+    Inserts a new contact in the local storage. Name and surname combination must be unique!
+
+    :param name:            the name of the contact (e.g. John)
+    :param surname:         the surname of the contact (e.g. Smith)
+    :param email_address:   the email of the contact (e.g. john.smith@example.com)
+    :param phone:           the phone of the contact (e.g 0770561512)
+    :param relation:        family, love, me, friend, other (one of those)
+    :return:
+    :raises: Exception of the contact is invalid or if the contact already exists
+    """
     contact = {
         'name': name,
         'surname': surname,
@@ -93,6 +104,31 @@ def update_contact(name, surname, email_address, phone, relation):
     pass
 
 
-def get_contacts():
-    db = TinyDB(TINY_DB_LOCATION)
-    return db.all()
+def get_contacts(criterion_list=None):
+    """
+
+    :param criterion_list:
+    :return:
+    """
+    return filter_contacts(TinyDB(TINY_DB_LOCATION).all(), criterion_list)
+
+
+def filter_contacts(contact_list, criterion_list):
+    """
+
+    :param contact_list:
+    :param criterion_list:
+    :return:
+    """
+    if criterion_list is None:
+        return contacts
+    remaining_contacts = []
+    for contact in contact_list:
+        valid = True
+        for criterion in criterion_list:
+            if not criterion[1](contact[criterion[0]]):
+                valid = False
+                break
+        if valid:
+            remaining_contacts.append(contact)
+    return remaining_contacts
