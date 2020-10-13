@@ -13,7 +13,14 @@ def send_email(recipients, subject, text):
 
 
 def send_email_with_mailgun(recipient, subject, text):
-    """ Raises Exception if any error occurs """
+    """
+    Sends email to one user via the Mailgun API
+
+    :param recipient: the email address of the recipient
+    :param subject:   the email subject
+    :param text:      the content of the email
+    :return:
+    """
     with open(MAIL_TEMPLATE_LOCATION, 'r') as file:
         email_html = file.read() \
             .replace('\n', '') \
@@ -29,6 +36,5 @@ def send_email_with_mailgun(recipient, subject, text):
                   "subject": subject,
                   "html": email_html})
 
-    if response.status_code != 200:
-        print(response.status_code)
-        raise Exception(response)
+        if response.status_code != 200:
+            print('Error occurred:', response.status_code)

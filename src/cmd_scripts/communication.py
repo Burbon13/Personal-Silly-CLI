@@ -1,11 +1,35 @@
 import click
-from ..utils import send_email, send_test_email, send_test_sms, send_sms
+from ..utils import send_email, send_test_email, send_test_sms, send_sms, insert_contact, get_contacts
 
 
 @click.group()
 def cli():
     """ Communication commands """
     pass
+
+
+@cli.command()
+def print_contacts():
+    """ Prints all saved contacts """
+    contact_list = get_contacts()
+    if len(contact_list) == 0:
+        print('You have no contacts :(')
+    for contact in contact_list:
+        print(contact)
+
+
+@cli.command()
+@click.argument('name')
+@click.argument('surname')
+@click.argument('email_address')
+@click.argument('phone')
+@click.argument('relation')
+def create_contact(name, surname, email_address, phone, relation):
+    """ Create and store a contact locally """
+    try:
+        insert_contact(name, surname, email_address, phone, relation)
+    except Exception as e:
+        print('Contact error:', str(e))
 
 
 @cli.command()

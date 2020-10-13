@@ -261,3 +261,7 @@ pip-selfcheck.json
 
 # ENV VAR SETUP
 set_env_vars.bat
+
+# TinyDb
+# Contacts
+static/contacts/contacts.json
