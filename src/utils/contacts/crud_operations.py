@@ -52,8 +52,18 @@ def verify_contact(contact):
 
 
 def is_contact_unique(contact, db):
-    """ TODO """
-    return True
+    """
+    Checks if a contact already exists with its name.
+
+    :param contact: the contact to be checked
+    :param db:      db reference for TinyDb
+    :return:
+    :raises: Exception if another contact already exists
+    """
+    User = Query()
+    existing_contact = db.search((User.name == contact['name']) & (User.surname == contact['surname']))
+    if len(existing_contact) > 0:
+        raise Exception(f'Contact {contact["name"]} {contact["surname"]} already exists')
 
 
 def insert_contact(name, surname, email_address, phone, relation):
@@ -68,6 +78,19 @@ def insert_contact(name, surname, email_address, phone, relation):
     db = TinyDB(TINY_DB_LOCATION)
     is_contact_unique(contact, db)
     db.insert(contact)
+    print('Contact added!')
+
+
+def delete_contact(name, surname):
+    """ Deletes a contact from the local storage """
+    User = Query()
+    db = TinyDB(TINY_DB_LOCATION)
+    db.remove((User.name == name) & (User.surname == surname))
+
+
+def update_contact(name, surname, email_address, phone, relation):
+    """ Updates a contact. Raises exception if no contact is found """
+    pass
 
 
 def get_contacts():

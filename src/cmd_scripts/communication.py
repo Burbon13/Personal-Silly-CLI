@@ -1,5 +1,6 @@
 import click
-from ..utils import send_email, send_test_email, send_test_sms, send_sms, insert_contact, get_contacts
+from ..utils import send_email, send_test_email, send_test_sms, send_sms, insert_contact, get_contacts, \
+    delete_contact as delete_contact_data
 
 
 @click.group()
@@ -9,13 +10,22 @@ def cli():
 
 
 @cli.command()
-def print_contacts():
+@click.argument('name')
+@click.argument('surname')
+def delete_contact(name, surname):
+    """ Deletes a contact from the local storage """
+    delete_contact_data(name, surname)
+
+
+@cli.command()
+def my_contacts():
     """ Prints all saved contacts """
     contact_list = get_contacts()
     if len(contact_list) == 0:
         print('You have no contacts :(')
     for contact in contact_list:
-        print(contact)
+        print(f'{contact["name"]} {contact["surname"]} ({contact["relation"]}):  {contact["phone"]}'
+              + f'  {contact["email_address"]}')
 
 
 @cli.command()
