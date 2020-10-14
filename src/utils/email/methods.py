@@ -4,22 +4,33 @@ from constants import MAIL_GUN_API_KEY, MAIL_GUN_DOMAIN, USER_NAME, MAIL_TEMPLAT
 
 
 def send_test_email(recipients):
+    """
+    Sends a test email.
+
+    :param recipients:  The recipient email address
+    """
     send_email_with_mailgun(recipients, 'Emailing test :>',
                             'This is an automated email test sent via the CLI silly tool, please ignore it!')
 
 
-def send_email(recipients, subject, text):
-    send_email_with_mailgun(recipients, subject, text)
+def send_email(recipient, subject, text):
+    """
+    Sends an email to one recipient.
+
+    :param recipient:   The recipient email address
+    :param subject:     The subject of the email
+    :param text:        The message to be sent
+    """
+    send_email_with_mailgun(recipient, subject, text)
 
 
 def send_email_with_mailgun(recipient, subject, text):
     """
     Sends email to one user via the Mailgun API
 
-    :param recipient: the email address of the recipient
-    :param subject:   the email subject
-    :param text:      the content of the email
-    :return:
+    :param recipient:   The recipient email address
+    :param subject:     The subject of the email
+    :param text:        The message to be sent
     """
     with open(MAIL_TEMPLATE_LOCATION, 'r') as file:
         email_html = file.read() \

@@ -1,6 +1,8 @@
 import click
-from ..utils import send_email, send_test_email, send_test_sms, send_sms, insert_contact, get_contacts, \
-    delete_contact as delete_contact_data, contact_to_string, make_selection_in_cli
+from ..utils.cli import make_selection_in_cli
+from ..utils.contacts import insert_contact, get_contacts, delete_contact as delete_contact_data, contact_to_string
+from ..utils.email import send_test_email, send_email
+from ..utils.sms import send_test_sms, send_sms
 
 
 @click.group()
@@ -22,7 +24,7 @@ def my_contacts():
     """ Prints all saved contacts """
     contact_list = get_contacts()
     if len(contact_list) == 0:
-        click.echo('You have no contacts :(')
+        click.echo(click.style('You have no contacts :(', fg='bright_yellow'))
     for contact in contact_list:
         click.echo(contact_to_string(contact))
 
@@ -38,7 +40,7 @@ def create_contact(name, surname, email_address, phone, relation):
     try:
         insert_contact(name, surname, email_address, phone, relation)
     except Exception as e:
-        click.echo('Contact error:', str(e))
+        click.echo(click.style(f'Contact error: {e}', fg='red'))
 
 
 @cli.command()
@@ -65,7 +67,7 @@ def sms(to, relation, name, text):
     if contact is not None:
         send_sms(contact['phone'], text)
     else:
-        click.echo('No contact found :(')
+        click.echo(click.style('No contact found :(', fg='bright_yellow'))
 
 
 @cli.command()

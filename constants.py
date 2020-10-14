@@ -1,5 +1,8 @@
 import os
 
+# Creator
+CREATOR_ASCII_PROFILE_FILE_PATH = os.environ['SILLY_CLI_CREATOR_ASCII_PROFILE_FILE_PATH']
+
 # Your name
 USER_NAME = os.environ['SILLY_CLI_USER_NAME']
 

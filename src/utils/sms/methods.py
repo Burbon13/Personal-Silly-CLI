@@ -36,11 +36,23 @@ def is_valid_number_twilio(number) -> bool:
         raise e
 
 
-def send_sms(recipients, text):
-    send_sms_with_twilio(recipients, text)
+def send_sms(recipient, text):
+    """
+    Sends a sms to the recipient.
+
+    :param recipient:   Valid phone number (add national prefix)
+    :param text:        The message to be sent
+    """
+    send_sms_with_twilio(recipient, text)
 
 
 def send_test_sms(recipient):
+    """
+    Sends a test sms.
+
+    :param recipient:   Valid phone number (add national prefix)
+    :return:
+    """
     send_sms_with_twilio(recipient,
                          'This is an automated sms test sent via the CLI silly tool, please ignore it!\n'
                          + 'Best, Razvan Roatis')

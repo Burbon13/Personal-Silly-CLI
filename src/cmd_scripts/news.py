@@ -26,11 +26,11 @@ def every(country, category, count):
             response_json = response.json()
             articles = response_json['articles']
             for article in articles:
-                click.echo(f'({article["publishedAt"]}) {article["title"]}')
+                click.echo(f'({click.style(article["publishedAt"], fg="bright_green")}) {article["title"]}')
         else:
-            click.echo(f'Response: {response.status_code}')
+            click.echo(click.style(f'Response: {response.status_code}', fg='red'))
     except Exception as e:
-        click.echo(f'Error unknown: {e.message}')
+        click.echo(click.style(f'Unexpected error occurred: {e}', fg='red'))
 
 
 if __name__ == '__main__':

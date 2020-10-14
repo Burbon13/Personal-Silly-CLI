@@ -57,7 +57,6 @@ def is_contact_unique(contact, db):
 
     :param contact: the contact to be checked
     :param db:      db reference for TinyDb
-    :return:
     :raises: Exception if another contact already exists
     """
     User = Query()
@@ -75,7 +74,6 @@ def insert_contact(name, surname, email_address, phone, relation):
     :param email_address:   the email of the contact (e.g. john.smith@example.com)
     :param phone:           the phone of the contact (e.g 0770561512)
     :param relation:        family, love, me, friend, other (one of those)
-    :return:
     :raises: Exception of the contact is invalid or if the contact already exists
     """
     contact = {
@@ -106,19 +104,21 @@ def update_contact(name, surname, email_address, phone, relation):
 
 def get_contacts(criterion_list=None):
     """
+    Retrieves the contacts based on some selection criterion.
 
-    :param criterion_list:
-    :return:
+    :param criterion_list:      A list of criterion for the selection
+    :return:                    The list with the selected contacts
     """
     return filter_contacts(TinyDB(TINY_DB_LOCATION).all(), criterion_list)
 
 
 def filter_contacts(contact_list, criterion_list):
     """
+    Filters the contacts based on some selection criterion.
 
-    :param contact_list:
-    :param criterion_list:
-    :return:
+    :param contact_list:        The list of contacts to be filtered
+    :param criterion_list:      A list of criterion for the selection. If None, all contacts are returned.
+    :return:                    The list with the filtered contacts
     """
     if criterion_list is None:
         return contacts
