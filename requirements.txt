@@ -4,7 +4,8 @@ click==7.1.2
 colorama==0.4.4
 idna==2.10
 my-funny-script==0.1
--e git+https://github.com/Burbon13/Personal-Silly-CLI.git@85489e16d067383cbf5655c8502bf30e66f20538#egg=my_silly_cli_tool
+-e git+https://github.com/Burbon13/Personal-Silly-CLI.git@25de95b2ed8a9cc027fbb7f664f7e57ffdbf0d06#egg=my_silly_cli_tool
+Pillow==8.0.0
 pip-autoremove==0.9.1
 PyJWT==1.7.1
 pytz==2020.1

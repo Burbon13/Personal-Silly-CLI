@@ -1,9 +1,14 @@
 """ Sample CLI commands """
 import click
 import requests
+from os import listdir
+from os.path import isfile, join
+import random
 from datetime import datetime, timedelta
-from constants import OPEN_WEATHER_API_KEY, CREATOR_ASCII_PROFILE_FILE_PATH
+from constants import OPEN_WEATHER_API_KEY, CREATOR_ASCII_PROFILE_FILE_PATH, PHOTOS_LOCATION
 from ..utils.cli import pretty_print_weather, pretty_print_all_covid_cases
+from ..utils.my_os import select_random_picture_from_directory
+from PIL import Image
 
 
 @click.group()
@@ -97,6 +102,18 @@ def dad_joke():
             click.echo(click.style(f'Error occurred: {response.status_code} HTTP code', fg='red'))
     except Exception as e:
         click.echo(click.style(f'Error occurred: {e}', fg='red'))
+
+
+@cli.command()
+@click.option('--subf', default='', help='The sub-folder where to search')
+def rand_pic(subf):
+    """ Opens a random picture """
+    try:
+        rand_pic_location = select_random_picture_from_directory(PHOTOS_LOCATION + subf)
+        click.echo(f'Opening {rand_pic_location} ...')
+        Image.open(rand_pic_location).show()
+    except Exception as e:
+        click.echo(click.style(f'Error occurred: "{e}" (check for path correctness)', fg='red'))
 
 
 if __name__ == '__main__':
