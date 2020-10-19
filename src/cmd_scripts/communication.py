@@ -81,9 +81,17 @@ def email_test(to):
 @click.option('--to', help='To whom you want to send the email')
 @click.option('--subject', help='The subject of the email')
 @click.option('--text', help='The text of the email')
-def email(to, subject, text):
+@click.option('--attachment', help='File to be added to the email')
+def email(to, subject, text, attachment):
     """ Send an email """
-    send_email(to, subject, text)
+    if attachment is None:
+        send_email(to, subject, text)
+    else:
+        try:
+            with open(attachment, 'rb') as in_file:
+                send_email(to, subject, text, [in_file])
+        except Exception as e:
+            click.echo(click.style(f'Error occurred: {e}', fg='red'))
 
 
 if __name__ == '__main__':

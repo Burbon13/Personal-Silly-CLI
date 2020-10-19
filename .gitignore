@@ -264,4 +264,7 @@ set_env_vars.bat
 
 # TinyDb
 # Contacts
-static/contacts/contacts.json
+data/contacts.json
+
+# Personalized commands
+commands/

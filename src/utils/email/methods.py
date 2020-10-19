@@ -13,25 +13,31 @@ def send_test_email(recipients):
                             'This is an automated email test sent via the CLI silly tool, please ignore it!')
 
 
-def send_email(recipient, subject, text):
+def send_email(recipient, subject, text, attached_files=None):
     """
     Sends an email to one recipient.
 
+    :param attached_files:
     :param recipient:   The recipient email address
     :param subject:     The subject of the email
     :param text:        The message to be sent
     """
-    send_email_with_mailgun(recipient, subject, text)
+    if attached_files is None:
+        attached_files = []
+    send_email_with_mailgun(recipient, subject, text, attached_files)
 
 
-def send_email_with_mailgun(recipient, subject, text):
+def send_email_with_mailgun(recipient, subject, text, attached_files=None):
     """
     Sends email to one user via the Mailgun API
 
+    :param attached_files:
     :param recipient:   The recipient email address
     :param subject:     The subject of the email
     :param text:        The message to be sent
     """
+    if attached_files is None:
+        attached_files = []
     with open(MAIL_TEMPLATE_LOCATION, 'r') as file:
         email_html = file.read() \
             .replace('\n', '') \
@@ -42,6 +48,7 @@ def send_email_with_mailgun(recipient, subject, text):
         response = requests.post(
             F"{MAIL_BASE_URL}/{MAIL_GUN_DOMAIN}/messages",
             auth=("api", MAIL_GUN_API_KEY),
+            files=[("attachment", attached) for attached in attached_files],
             data={"from": f"{USER_NAME} <{MAIL_REPLY_TO}>",
                   "to": [recipient],
                   "subject": subject,
