@@ -1,6 +1,6 @@
 from tinydb import TinyDB, Query
 from constants import TINY_DB_LOCATION
-from ..sms import is_valid_number
+from src.utils.sms import is_valid_number
 from validate_email import validate_email
 
 REQUIRED_CONTACT_ATTRIBUTES = [

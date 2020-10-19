@@ -1,6 +1,7 @@
 import click
 from ..utils.cli import make_selection_in_cli
-from ..utils.contacts import insert_contact, get_contacts, delete_contact as delete_contact_data, contact_to_string
+from ..data.contacts import insert_contact, get_contacts, delete_contact as delete_contact_data
+from ..utils.contacts import contact_to_string
 from ..utils.email import send_test_email, send_email
 from ..utils.sms import send_test_sms, send_sms
 
