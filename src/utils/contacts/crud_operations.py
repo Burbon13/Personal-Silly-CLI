@@ -121,7 +121,7 @@ def filter_contacts(contact_list, criterion_list):
     :return:                    The list with the filtered contacts
     """
     if criterion_list is None:
-        return contacts
+        return contact_list
     remaining_contacts = []
     for contact in contact_list:
         valid = True
