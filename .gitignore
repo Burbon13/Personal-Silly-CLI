@@ -260,8 +260,12 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,venv
 
 # ENV VAR SETUP
-set_env_vars.bat
+set_env_vars.*
 
 # TinyDb
 # Contacts
 static/contacts/contacts.json
+
+
+commands/
+data/

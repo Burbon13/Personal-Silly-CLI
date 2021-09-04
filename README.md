@@ -12,11 +12,8 @@ A collection of random CLI commands which I though would be nice/fun to implemen
 ## Steps
 
 ```shell
-# Install 
-pip install virtualenv
-
 # Create the virtual environment
-virtualenv env
+python3 -m venv env
 
 # Activate the env
 source env/bin/activate
@@ -30,13 +27,15 @@ deactivate
 
 ```shell
 # Build the commands
-python3 setup.pe build
+pip install -e .
 
 # Set the environment variables
 . ./setup_env_vars.sh   # Or setup_env_vars.bat for Windows
 
 # Now feel free to execute any command
 
-# Example
-silly dad-joke
+# Commands available. Run with --help to see what options you have.
+silly 
+news
+comm
 ```
