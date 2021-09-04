@@ -12,9 +12,9 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        silly=src.scripts.silly:cli
-        news=src.scripts.news:cli
-        comm=src.scripts.communication:cli
-        sysinfo=src.scripts.sysinfo:cli
+        silly=src.my_scripts.silly:cli
+        news=src.my_scripts.news:cli
+        comm=src.my_scripts.communication:cli
+        sysinfo=src.my_scripts.sysinfo:cli
     ''',
 )
