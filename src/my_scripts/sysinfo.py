@@ -1,5 +1,6 @@
 import click
 import platform
+import os
 
 
 """
@@ -22,7 +23,11 @@ def platform_information():
     click.echo(f'System: {platform.system()}')
 
 
-
+@cli.command()
+def environment_variables():
+    """ Prints all environment variables """
+    for env_var in os.environ:
+        click.echo(f'{env_var}="{os.environ[env_var]}"')
 
 
 if __name__ == '__main__':
