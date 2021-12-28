@@ -16,5 +16,6 @@ setup(
         news=src.my_scripts.news:cli
         comm=src.my_scripts.communication:cli
         sysinfo=src.my_scripts.sysinfo:cli
+        pdf=src.my_scripts.pdf:cli
     ''',
 )

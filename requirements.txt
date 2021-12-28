@@ -1,8 +1,9 @@
 certifi==2020.6.20
 chardet==3.0.4
 click==7.1.2
+fpdf==1.7.2
 idna==2.10
--e git+https://github.com/Burbon13/Personal-Silly-CLI.git@549f3b7d518fb7bca22d6e6db6c2a6fc801cfa82#egg=my_silly_cli_tool
+-e git+https://github.com/Burbon13/Personal-Silly-CLI.git@e499493aed9827d6bb98dc34a004b99e9fc29505#egg=my_silly_cli_tool
 pip-autoremove==0.9.1
 PyJWT==1.7.1
 pytz==2020.1
