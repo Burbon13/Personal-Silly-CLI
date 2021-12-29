@@ -3,7 +3,7 @@ from ..utils.pdf import create_daily_pdf
 
 @click.group()
 def cli():
-    """ News aggregator from several APIs/Websites """
+    """ PDF generator utils """
     pass
 
 @cli.command()
