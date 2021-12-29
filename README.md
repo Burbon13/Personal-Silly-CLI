@@ -37,6 +37,7 @@ silly
 news
 comm
 pdf
+crypto
 ```
 
 # Util links
