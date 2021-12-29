@@ -7,5 +7,6 @@ def cli():
     pass
 
 @cli.command()
-def do_create_daily_pdf():
-    create_daily_pdf()
+@click.option('--count', default=5, help='How many jokes you want?')
+def do_create_daily_pdf(count: int):
+    create_daily_pdf(count)

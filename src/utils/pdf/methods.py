@@ -1,27 +1,80 @@
 
 from fpdf import FPDF
+import requests
 
 
-class PDF(FPDF):
+# Template PDF containing a list of jokes
+# For sad days, to cheer up! :D
+class JOKES_PDF(FPDF):
+
+    BORDER_LINE_WIDTH = 0.0
+    LEFTMOST_POINT    = 5.0
+    RIGHTMOST_POINT   = 205.0
+    UPPERMOST_POINT   = 5.0
+    LOWERMOST_POINT   = 292.0
+    TITLE_FONT        = 'Arial'
+    TEXT_FONT         = 'Times'
+    TEXT_SIZE         = 12
+    TITLE             = 'Daily Jokes'
+    AUTHOR            = 'Silly CLI - Jokes division'
+    LOGO1_PATH        = './static/photos/laugh.png'
+    LOGO2_PATH        = './static/photos/smile.jpg'
+    TITLE_RGB         = (0, 153, 51)
+    TEXT_RGB          = (204, 0, 153)
+
+    def header(self):
+        self.image(JOKES_PDF.LOGO1_PATH, 10, 8, 33)
+        self.image(JOKES_PDF.LOGO2_PATH, 169, 8, 33)
+        self.set_font(JOKES_PDF.TITLE_FONT, 'B', 15)
+        self.set_text_color(JOKES_PDF.TITLE_RGB[0], JOKES_PDF.TITLE_RGB[1], JOKES_PDF.TITLE_RGB[2])
+        # Move to the right
+        self.cell(80)
+        self.cell(30, 10, JOKES_PDF.TITLE, 0, 0, 'C')
+        # Line break
+        self.ln(40)
+
+    # Page footer
+    def footer(self):
+        # Position at 1.5 cm from bottom
+        self.set_y(-15)
+        self.set_font(JOKES_PDF.TITLE_FONT, 'I', 8)
+        # Page number
+        self.cell(0, 10, 'Page ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
 
     def set_border_lines(self):
-        self.set_line_width(0.0)
-        self.line(5.0,5.0,205.0,5.0) # top one
-        self.line(5.0,292.0,205.0,292.0) # bottom one
-        self.line(5.0,5.0,5.0,292.0) # left one
-        self.line(205.0,5.0,205.0,292.0) # right one
+        self.set_line_width(JOKES_PDF.BORDER_LINE_WIDTH)
+        self.line(JOKES_PDF.LEFTMOST_POINT,   JOKES_PDF.UPPERMOST_POINT, JOKES_PDF.RIGHTMOST_POINT, JOKES_PDF.UPPERMOST_POINT)
+        self.line(JOKES_PDF.LEFTMOST_POINT,   JOKES_PDF.LOWERMOST_POINT, JOKES_PDF.RIGHTMOST_POINT, JOKES_PDF.LOWERMOST_POINT)
+        self.line(JOKES_PDF.LEFTMOST_POINT,   JOKES_PDF.UPPERMOST_POINT, JOKES_PDF.LEFTMOST_POINT,  JOKES_PDF.LOWERMOST_POINT)
+        self.line(JOKES_PDF.RIGHTMOST_POINT,  JOKES_PDF.UPPERMOST_POINT, JOKES_PDF.RIGHTMOST_POINT, JOKES_PDF.LOWERMOST_POINT)
 
-    def set_title(self, the_title : str):
-        self.set_xy(0.0,0.0)
-        self.set_font('Arial', 'B', 16)
-        self.set_text_color(220, 50, 50)
-        self.cell(w=210.0, h=40.0, align='C', txt=the_title, border=0)
+    def add_joke(self, txt: str, index: int):
+        txt = txt.encode('latin-1', 'replace').decode('latin-1') # Hackish workaround
+        txt = str(index) + ') ' + txt
+        self.set_text_color(JOKES_PDF.TEXT_RGB[0], JOKES_PDF.TEXT_RGB[1], JOKES_PDF.TEXT_RGB[2])
+        self.multi_cell(0, 10, txt, 0, 1)
+
+    def generate():
+        pdf = JOKES_PDF(orientation='P', unit='mm', format='A4')
+        pdf.alias_nb_pages()
+        pdf.add_page()
+        pdf.set_border_lines()
+        pdf.set_author(JOKES_PDF.AUTHOR)
+        pdf.set_font(JOKES_PDF.TEXT_FONT, '', JOKES_PDF.TEXT_SIZE)
+        return pdf
 
 
-def create_daily_pdf():
-    pdf = PDF(orientation='P', unit='mm', format='A4')
-    pdf.add_page()
-    pdf.set_border_lines()
-    pdf.set_title('Daily')
-    pdf.set_author('Silly CLI')
+def add_joke(pdf: JOKES_PDF, index: int):
+    try:
+        response = requests.get('https://icanhazdadjoke.com/', headers={'Accept': 'application/json'})
+        if response.status_code == 200:
+            pdf.add_joke(response.json()['joke'], index)
+    except Exception:
+        pass
+
+
+def create_daily_pdf(number_of_jokes: int = 5):
+    pdf = JOKES_PDF.generate()
+    for i in range(number_of_jokes):
+        add_joke(pdf, i + 1)
     pdf.output('daily.pdf', 'F')
