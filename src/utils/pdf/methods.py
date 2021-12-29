@@ -1,6 +1,7 @@
 
 from fpdf import FPDF
 import requests
+from ..services import get_multiple_dad_jokes
 
 
 # Template PDF containing a list of jokes
@@ -64,17 +65,14 @@ class JOKES_PDF(FPDF):
         return pdf
 
 
-def add_joke(pdf: JOKES_PDF, index: int):
-    try:
-        response = requests.get('https://icanhazdadjoke.com/', headers={'Accept': 'application/json'})
-        if response.status_code == 200:
-            pdf.add_joke(response.json()['joke'], index)
-    except Exception:
-        pass
-
-
 def create_daily_pdf(number_of_jokes: int = 5):
+    """
+    Generates a PDF file with jokes.
+
+    :param number_of_jokes: How many jokes to be added to the PDF file
+    """
     pdf = JOKES_PDF.generate()
-    for i in range(number_of_jokes):
-        add_joke(pdf, i + 1)
+    jokes = get_multiple_dad_jokes(number_of_jokes)
+    for index, joke in enumerate(jokes):
+        pdf.add_joke(joke, index + 1)
     pdf.output('daily.pdf', 'F')

@@ -4,7 +4,7 @@ import requests
 from datetime import datetime, timedelta
 from constants import OPEN_WEATHER_API_KEY, CREATOR_ASCII_PROFILE_FILE_PATH
 from ..utils.cli import pretty_print_weather, pretty_print_all_covid_cases
-
+from ..utils.services import get_dad_joke
 
 @click.group()
 def cli():
@@ -90,11 +90,7 @@ def covid(country, days):
 def dad_joke():
     """ Prints a random dad joke (lovely type of jokes). Want to piss your girlfriend? USE THIS!!! """
     try:
-        response = requests.get('https://icanhazdadjoke.com/', headers={'Accept': 'application/json'})
-        if response.status_code == 200:
-            click.echo(click.style(response.json()['joke'], fg='bright_green'))
-        else:
-            click.echo(click.style(f'Error occurred: {response.status_code} HTTP code', fg='red'))
+        click.echo(click.style(get_dad_joke(), fg='bright_green'))
     except Exception as e:
         click.echo(click.style(f'Error occurred: {e}', fg='red'))
 

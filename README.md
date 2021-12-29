@@ -36,6 +36,7 @@ pip install -e .
 silly 
 news
 comm
+pdf
 ```
 
 # Util links
