@@ -1,12 +1,15 @@
 import click
 
 
-from ..utils.services import hide_data_in_image_path_and_save, extract_data_from_image_path
+from ..utils.services import hide_data_in_image_path_and_save, \
+    extract_data_from_image_path, \
+    hide_xored_data_in_image_path_and_save, \
+    extract_xored_data_from_image_path
 
 
 @click.group()
 def cli():
-    """ Cryptography functions """
+    """ Cryptography/Steganography functions """
     pass
 
 
@@ -74,3 +77,37 @@ def extract_text_file(photo_path: str):
     with open(new_text_file_name, 'w+') as new_file:
         new_file.write(text)
         click.echo('Text successfully saved into file')
+
+
+@cli.command()
+@click.argument('photo_path')
+@click.argument('secret')
+@click.argument('text')
+def hide_xor_text(photo_path: str, secret: str, text: str):
+    """ 
+    Hides xored text into an image 
+    
+    photo_path: Where does the image reside
+    secret: used to xor the text (i.e. password)
+    text: What text will be hidden inside the image
+    """
+    click.echo('Hiding data ...')
+    hide_xored_data_in_image_path_and_save(text, photo_path, secret)
+    click.echo('Text successfully hidden!')
+
+
+@cli.command()
+@click.argument('photo_path')
+@click.argument('secret')
+def extract_xor_text(photo_path: str, secret: str):
+    """ 
+    Extracts hidden xored text from an image 
+    
+    photo_path: Where does the image reside
+    secret: used for xoring (decrypting)
+    """
+    click.echo('Retrieving the hidden information ...')
+    text = extract_xored_data_from_image_path(photo_path, secret)
+    click.echo('=========== Text found: ===========')
+    click.echo(text)
+    click.echo('===================================')
